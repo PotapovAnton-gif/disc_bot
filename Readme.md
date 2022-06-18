@@ -26,7 +26,7 @@ config.py = {
 
 users.yml = {
 
-    user_id_trello : "@discrod_username"
+    user_id_trello : "<@discord_id>"
 
 }
 
