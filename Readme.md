@@ -17,11 +17,29 @@ config.py = {
 }
 
 users.yml = {
+
     user_id_trello : "@discrod_username"
+
 }
 
 db.yml = {
+
     last_activity = "" - str
     quan_cards = 0 - int 
+
 }
 
+# usage 
+
+run following commands to start your bot in docker  
+
+run : sudo docker build -t your_name_of_image /your/path/to/disc_bot
+
+run : sudo docker run -d --name your_name_of_container your_name_of_image
+
+
+
+For questions write to me at:
+
+tg : @JastAnt
+email: antpotapov2019@gmail.com
