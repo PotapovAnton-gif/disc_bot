@@ -1,6 +1,14 @@
 ## DISCORD BOT FOR TRELLO NOTIFICATIONS
 
-This bot is about coonect to your trello board, get the changes and send it to your chat
+This bot is about coonect to your trello board, get the changes and send it to
+    your chat
+
+You shold activate some things, first of all you have to create your 
+    pesonal api_key, api-secrt and token. More information about this [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/)
+
+Also you need to activate [developer mod](https://www.howtogeek.com/714348/how-to-enable-or-disable-developer-mode-on-discord/) to your discord
+    account and take chennel id for bot. Then go and set up [token](https://tproger.ru/articles/sozdajom-discord-bota-na-python/#:~:text=%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D1%91%D0%BC%20%D0%BD%D0%B0%D1%88%D0%B5%D0%B3%D0%BE%20%D0%B1%D0%BE%D1%82%D0%B0,%D0%94%D0%B0%D0%BB%D1%8C%D1%88%D0%B5%20%D0%BE%D0%BD%20%D0%BD%D0%B0%D0%BC%20%D0%BF%D0%BE%D0%BD%D0%B0%D0%B4%D0%BE%D0%B1%D0%B8%D1%82%D1%81%D1%8F!)for your bot
+      
 
 You need to create files:
 

@@ -24,3 +24,4 @@ async def on_ready():
 
 client.loop.create_task(my_background_task())
 client.run(bot_token)
+

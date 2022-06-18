@@ -1,12 +1,15 @@
+from statistics import mode
 from typing import List, Dict
 from trello import TrelloClient
 import yaml
 from config import api_key, api_secret, token, board_id
 
+
 class Trwork:
+
+
     def __init__(self):
-        
-     
+
         self.client = TrelloClient(
                 api_key = api_key,
                 api_secret=api_secret,
@@ -21,6 +24,20 @@ class Trwork:
         with open('users.yml') as us:
 
             self.users = yaml.safe_load(us)
+
+        self.possible_actions = {
+
+        "createCard" : "создана карточка",
+        "updateCard" : "перемещена карточка",
+        "deleteCard" : "удалена карточка",
+        "updateCheckItemStateOnCard" : "обновлено состояние карточки",
+        "commentCard" : "добавлен комментарий в карточке",
+        "addChecklistToCard" : "добавлен чек-лист в карточке",
+        "addMemberToCard" : "добавлен участник к карточке",
+        "makeAdminOfBoard" : "добавлен администратор доски",
+        "removeMemberFromCard" : "удален участник с карточки",
+    
+        }
     
 
     def get_action(self, acfiltr:str) -> Dict:
@@ -45,66 +62,42 @@ class Trwork:
                                                         ):
             
             self.db["last_activity"] = str(self.board.get_last_activity())
-            quat_cards = len(self.board.all_cards())
             
-            if self.db["quan_cards"] < quat_cards:
-                self.db["quan_cards"] = quat_cards
-                
-                with open("db.yml", 'w') as db:
-                    yaml.safe_dump(self.db, db, default_flow_style=False)
-                
-                action = self.get_action("createCard")
-                creator = action.get("memberCreator").get("id")
+            with open("db.yml", 'w') as db:
+                yaml.safe_dump(self.db, db, default_flow_style=False)            
+
+            action = self.get_action("all")
+            type_action = self.possible_actions.get(action.get("type"))    
+            creator = self.users.get(
+                action.get("memberCreator").get("id")
+                )
+            
+            try:
                 name_of_card = action.get('data').get('card').get('name')
-                users = self.get_users(action.get('data').get('card').get('id'))
-                list = action.get("data").get("list").get("name")    
-                
-                message = f"Была добавлена карточка пользователем: {self.users.get(creator)}, с именем: {name_of_card}, в колонку: {list}, прикреплены пользовалели:"
-                try:
-                    for i in users:
-                        message += " " + self.users[i]
-                
-                except:
-                    KeyError
-                return message
+            except:
+                name_of_card = "Никакая("
             
-            elif self.db["quan_cards"] == quat_cards:
-                
-                with open("db.yml", 'w') as db:
-                    yaml.safe_dump(self.db, db, default_flow_style=False)
-
-                action = self.get_action("updateCard")
-                creator = action.get("memberCreator").get("id")
-                name_of_card = action.get('data').get('card').get('name')
-                users = self.get_users(action.get('data').get('card').get('id'))
-                try:
-                    list = action.get('data').get('listAfter').get("name")
-                except:
-                    list = action.get('data').get("list").get("name")    
-                
-                message = f"Была перемещена карточка пользователем: {self.users.get(creator)}, с именем: {name_of_card}, в колонку: {list}, прикреплены пользовалели:"
-                try:
-                    for i in users:
-                        message += " " + self.users[i]
-                
-                except:
-                    KeyError
-                return message
-
+            users = self.get_users(
+                action.get('data').get('card').get('id')
+                )
+            try:
+                list = action.get('data').get('listAfter').get("name")
+            except:
+                list = action.get('data').get("list").get("name")      
             
-            else: 
-                self.db["quan_cards"] = quat_cards
-
-                with open("db.yml", 'w') as db:
-                    yaml.safe_dump(self.db, db, default_flow_style=False)
-
-                action = self.get_action("deleteCard")
-                creator = action.get("memberCreator").get("id")
-                name_of_card = action.get('data').get('card').get('name') 
-                list = action.get("data").get("list").get("name")    
-                
-                message = f"Была удалена карточка пользователем: {self.users.get(creator)}, из колонки: {list}"
-                return message
+            
+            message1 = f"Свершилось чудо: {type_action}," 
+            message3 = f"этим прекрасным человеком: {creator} (огромное ему спасибо за работу),"
+            message2 = f" с имяшкой: {name_of_card}, в колоночку: {list}, "
+            message4 = "не позавидуешь:"
+            try:
+                for i in users:
+                    message4 += " " + self.users[i]
+            
+            except:
+                None
+            return message1 + message2 + message3 + message4
+            
 
 
 
@@ -112,7 +105,6 @@ class Trwork:
 
 if __name__ == "__main__":
     trel = Trwork()
-    
     
     while True:
         message = trel.get_message()
