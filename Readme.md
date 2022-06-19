@@ -32,8 +32,7 @@ users.yml = {
 
 db.yml = {
 
-    last_activity = "" - str
-    quan_cards = 0 - int 
+    last_activity = "" - str 
 
 }
 
