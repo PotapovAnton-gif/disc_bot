@@ -1,4 +1,3 @@
-from statistics import mode
 from typing import List, Dict
 from trello import TrelloClient
 import yaml
@@ -53,7 +52,11 @@ class Trwork:
         for i in self.cards:
             if i.id == targ_id:
                 return i.idMembers
-    
+   
+    def get_list(self, card_id:str):
+        for i in self.board.get_cards():
+            if i.id == card_id:
+                return i.get_list().name
 
     def get_message(self) -> str:
 
@@ -72,23 +75,36 @@ class Trwork:
                 action.get("memberCreator").get("id")
                 )
             
-            try:
+            if action.get("data").get("card") is not None:
                 name_of_card = action.get('data').get('card').get('name')
-            except:
+            else:
                 name_of_card = "Никакая("
             
             users = self.get_users(
                 action.get('data').get('card').get('id')
                 )
-            try:
-                list = action.get('data').get('listAfter').get("name")
-            except:
-                list = action.get('data').get("list").get("name")      
+            
+            
+            data = action.get("data")
+            
+            if data.get("list") is None:
+                
+                if data.get("listAfter") is None:
+                    
+                    list_ = self.get_list(
+                        data.get('card').get('id')
+                    )
+                
+                else:
+                    list_ = data.get("listAfter").get('name')
+
+            else:
+                list_ = data.get("list").get("name")
             
             
             message1 = f"Свершилось чудо: {type_action}," 
             message3 = f"этим прекрасным человеком: {creator} (огромное ему спасибо за работу),"
-            message2 = f" с имяшкой: {name_of_card}, в колоночку: {list}, "
+            message2 = f" с имяшкой: {name_of_card}, в колоночку(e): {list_}, "
             message4 = "не позавидуешь:"
             try:
                 for i in users:
@@ -105,11 +121,18 @@ class Trwork:
 
 if __name__ == "__main__":
     trel = Trwork()
+    members = trel.board.get_members()
+    for i in members:
+        if i.id == "5c5b0176c47e1e31e10cab13":
+            print(i.full_name)
     
-    while True:
-        message = trel.get_message()
-        if message is not None:
-            print (message)
+   
+    
+
+    # while True:
+    #     message = trel.get_message()
+    #     if message is not None:
+    #         print (message)
 
 
 

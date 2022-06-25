@@ -1,4 +1,6 @@
-db.yml
-config.py
-users.yml
-notif_bot_disc.tar
+code/db.yml
+code/config.py
+code/users.yml
+doc_tar
+build.sh
+code/__pycache__
